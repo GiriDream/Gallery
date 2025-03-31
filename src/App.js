@@ -1,123 +1,46 @@
-import {Component} from 'react'
-import ThumbnailItem from './components/ThumbnailItem';
-
-import Gallery from './components/Gallery'
+import { Component } from 'react'
+import Capitals from './components/Capitals'
 import './App.css'
 
-const imagesList = [
-    {
-      id: 0,
-      imageUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-mountain-with-pond-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-mountain-with-pond-thumbnail-img.png',
-      imageAltText: 'nature mountain with pond',
-      thumbnailAltText: 'nature mountain with pond thumbnail',
-    },
-    {
-      id: 1,
-      imageUrl: 'https://assets.ccbp.in/frontend/react-js/nature-sunset-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-sunset-thumbnail-img.png',
-      imageAltText: 'nature sunset',
-      thumbnailAltText: 'nature sunset thumbnail',
-    },
-    {
-      id: 2,
-      imageUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-mountain-with-ocean-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-mountain-with-ocean-thumbnail-img.png',
-      imageAltText: 'nature mountain with ocean',
-      thumbnailAltText: 'nature mountain with ocean thumbnail',
-    },
-    {
-      id: 3,
-      imageUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-mountain-with-forest-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-mountain-with-forest-thumbnail-img.png',
-      imageAltText: 'nature mountain with forest',
-      thumbnailAltText: 'nature mountain with forest thumbnail',
-    },
-    {
-      id: 4,
-      imageUrl: 'https://assets.ccbp.in/frontend/react-js/nature-leaves-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-leaves-thumbnail-img.png',
-      imageAltText: 'nature leaves',
-      thumbnailAltText: 'nature leaves thumbnail',
-    },
-    {
-      id: 5,
-      imageUrl: 'https://assets.ccbp.in/frontend/react-js/nature-tree-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-tree-thumbnail-img.png',
-      imageAltText: 'nature tree',
-      thumbnailAltText: 'nature tree thumbnail',
-    },
-    {
-      id: 6,
-      imageUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-waterfall-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-waterfall-thumbnail-img.png',
-      imageAltText: 'nature waterfall',
-      thumbnailAltText: 'nature waterfall thumbnail',
-    },
-    {
-      id: 7,
-      imageUrl: 'https://assets.ccbp.in/frontend/react-js/nature-river-img.png',
-      thumbnailUrl:
-        'https://assets.ccbp.in/frontend/react-js/nature-river-thumbnail-img.png',
-      imageAltText: 'nature river',
-      thumbnailAltText: 'nature river thumbnail',
-    },
-  ]
+const countryAndCapitalsList = [
+  { id: 'NEW_DELHI', capitalDisplayText: 'New Delhi', country: 'India' },
+  { id: 'LONDON', capitalDisplayText: 'London', country: 'United Kingdom' },
+  { id: 'PARIS', capitalDisplayText: 'Paris', country: 'France' },
+  { id: 'KATHMANDU', capitalDisplayText: 'Kathmandu', country: 'Nepal' },
+  { id: 'HELSINKI', capitalDisplayText: 'Helsinki', country: 'Finland' },
+]
 
+class App extends Component {
+  state = { selectedCapital: countryAndCapitalsList[0].id }
 
+  handleSelectChange = (event) => {
+    this.setState({ selectedCapital: event.target.value })
+  }
 
+  render() {
+    const { selectedCapital } = this.state
+    const selectedCapitalObj = countryAndCapitalsList.find(
+      (item) => item.id === selectedCapital
+    )
 
+    return (
+      <div className="app-container">
+        <h1 className="heading">Country & Capital Finder</h1>
 
-  class App extends Component {
-    state = {
-        activeId: imagesList[0].id
-    }
+        <label htmlFor="capitals">Choose a Capital:</label>
+        <select id="capitals" onChange={this.handleSelectChange} className="dropdown">
+          {countryAndCapitalsList.map((eachCountry) => (
+            <option key={eachCountry.id} value={eachCountry.id}>
+              {eachCountry.capitalDisplayText}
+            </option>
+          ))}
+        </select>
 
-    updateActiveId = (id) => {
-        this.setState({ activeId: id })
-    }
-
-    getFilteredImages = () => {
-        const { activeId } = this.state
-        return imagesList.filter(each => each.id === activeId)
-    }
-
-    render() {
-        const filteredImages = this.getFilteredImages()
-
-        return (
-            <div className="app-container">
-                {filteredImages.map((image) => (
-                    <Gallery key={image.id} imagesDetails={image} />
-                ))}
-
-                <h1>Nature Photography</h1>
-                <p>Nature Photography With Rahul</p>
-
-                <div className="thumbnails-list">
-                    {imagesList.map((image) => (
-                        <ThumbnailItem
-                            key={image.id}
-                            imagesDetails={image}
-                            updateActiveId={this.updateActiveId}
-                            isActive={image.id === this.state.activeId}
-                        />
-                    ))}
-                </div>
-            </div>
-        )
-    }
+        {/* Passing props to Capitals Component */}
+        <Capitals capital={selectedCapitalObj.capitalDisplayText} country={selectedCapitalObj.country} />
+      </div>
+    )
+  }
 }
 
 export default App
